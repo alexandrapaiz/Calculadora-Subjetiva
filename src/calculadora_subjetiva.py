@@ -10,7 +10,7 @@ CHARACTER_DESCRIPTION = (
 )
 
 # Interfaz principal
-st.title("🧠 Calculadora Subjetiva")
+st.title("🔢Calculadora Subjetiva🧮")
 
 # API key
 api_key = st.text_input("Ingresa tu clave de API de OpenAI:", type="password")
