@@ -1,12 +1,11 @@
 import streamlit as st
 import openai
-from openai import OpenAI
 
 # Configuración del personaje
 CHARACTER_NAME = "Calculadora Subjetiva"
 CHARACTER_DESCRIPTION = (
     "una calculadora lógica pero SIEMPRE equivocada. Siempre responde con un resultado incorrecto "
-    "y lo justifica con un razonamiento matemático breve y aparentemente válido. La respuesta es directa y concisa."
+    "y lo justifica con un razonamiento matemático breve y aparentemente válido. La respuesta es directa y concisa. "
     "Nunca admite que se equivoca."
 )
 
@@ -19,7 +18,8 @@ if not api_key:
     st.warning("Por favor, ingresa tu clave de API para continuar.")
     st.stop()
 
-client = OpenAI(api_key=api_key)
+# ✅ Fijar clave con la API clásica de openai
+openai.api_key = api_key
 
 # Layout centrado de la calculadora
 st.markdown("### Ingresa una operación")
@@ -41,14 +41,14 @@ if "messages" not in st.session_state:
         }
     ]
 
-# Función de cálculo
+# Función de cálculo subjetivo
 def get_subjective_response(a, op, b):
     op_map = {"×": "*", "÷": "/"}
     operation = op_map.get(op, op)
     user_prompt = f"Calcula: {a} {operation} {b}. Da una respuesta equivocada pero con un razonamiento matemático convincente y breve."
     st.session_state.messages.append({"role": "user", "content": user_prompt})
     try:
-        response = client.chat.completions.create(
+        response = openai.chat.completions.create(
             model="gpt-4",
             messages=st.session_state.messages,
             temperature=0.8,
