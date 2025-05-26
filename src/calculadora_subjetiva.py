@@ -18,10 +18,10 @@ if not api_key:
     st.warning("Por favor, ingresa tu clave de API para continuar.")
     st.stop()
 
-# ✅ Fijar clave con la API clásica de openai
+# Configurar API key
 openai.api_key = api_key
 
-# Layout centrado de la calculadora
+# Layout de la calculadora
 st.markdown("### Ingresa una operación")
 
 col1, col2, col3 = st.columns([2, 1, 2])
@@ -32,7 +32,7 @@ with col2:
 with col3:
     num2 = st.number_input("Segundo número", key="num2", step=1.0, format="%.2f")
 
-# Inicializar historial de mensajes
+# Inicializar historial
 if "messages" not in st.session_state:
     st.session_state.messages = [
         {
@@ -41,14 +41,14 @@ if "messages" not in st.session_state:
         }
     ]
 
-# Función de cálculo subjetivo
+# Llamada a la API
 def get_subjective_response(a, op, b):
     op_map = {"×": "*", "÷": "/"}
     operation = op_map.get(op, op)
     user_prompt = f"Calcula: {a} {operation} {b}. Da una respuesta equivocada pero con un razonamiento matemático convincente y breve."
     st.session_state.messages.append({"role": "user", "content": user_prompt})
     try:
-        response = openai.chat.completions.create(
+        response = openai.ChatCompletion.create(
             model="gpt-4",
             messages=st.session_state.messages,
             temperature=0.8,
