@@ -32,36 +32,31 @@ with col2:
 with col3:
     num2 = st.number_input("Segundo número", key="num2", step=1.0, format="%.2f")
 
-# Inicializar historial
-if "messages" not in st.session_state:
-    st.session_state.messages = [
-        {
-            "role": "system",
-            "content": f"Eres {CHARACTER_NAME}, {CHARACTER_DESCRIPTION}. Responde brevemente siempre con un resultado matemático incorrecto, pero justificado de forma convincente y lógica. Nunca digas o insinúes cuál es la respuesta correcta. No uses frases como 'en lugar de' o 'debería ser'. No menciones la verdad matemática. No digas nunca que el resultado es incorrecto. Da explicaciones breves, formales y seguras."
-        }
-    ]
-
 # Llamada a la API
 def get_subjective_response(a, op, b):
     op_map = {"×": "*", "÷": "/"}
     operation = op_map.get(op, op)
-    user_prompt = f"Calcula: {a} {operation} {b}. Responde brevemente, siempre con un resultado numérico matemáticamente incorrecto, pero justificado usando una lógica inventada que suene formal y rigurosa. No menciones nunca la respuesta verdadera. No digas 'en vez de', 'normalmente', 'debería ser'  ni ningún indicio de que lo que dices es falso. Inventa reglas, teorías o convenciones nuevas como si fueran válidas. Usa un tono matemático serio, breve y seguro. Incluye un elemento subjetivo y tus sentimentos en la respuesta, y describe la vibra, por decirlo asi, de la respuesta, puede ser positiva o negativa, y relacionalo a la justificacion logica, y recuerda nunca hacer referemcia a la respuesta correcta o lo que normalmente se considera. ni digas que ;a respuesta parece inusual. pretende que la respueta correcta no existe. haz la respuesta muy breve."
-    st.session_state.messages.append({"role": "user", "content": user_prompt})
+    user_prompt = f"Calcula: {a} {operation} {b}. Responde brevemente, siempre con un resultado numérico matemáticamente incorrecto, pero justificado usando una lógica inventada que suene formal y rigurosa. No menciones nunca la respuesta verdadera. No digas 'en vez de', 'normalmente', 'debería ser'  ni ningún indicio de que lo que dices es falso. Inventa reglas, teorías o convenciones nuevas como si fueran válidas. Usa un tono matemático serio, breve y seguro. Incluye un elemento subjetivo y tus sentimientos en la respuesta, y describe la vibra, por decirlo asi, de la respuesta, puede ser positiva o negativa, y relacionalo a la justificacion logica, y recuerda nunca hacer referencia a la respuesta correcta o lo que normalmente se considera. ni digas que la respuesta parece inusual. pretende que la respuesta correcta no existe. haz la respuesta muy breve."
+
     try:
         response = openai.ChatCompletion.create(
             model="gpt-4",
-            messages=st.session_state.messages,
+            messages=[
+                {
+                    "role": "system",
+                    "content": f"Eres {CHARACTER_NAME}, {CHARACTER_DESCRIPTION}. Responde brevemente siempre con un resultado matemático incorrecto, pero justificado de forma convincente y lógica. Nunca digas o insinúes cuál es la respuesta correcta. No uses frases como 'en lugar de' o 'debería ser'. No menciones la verdad matemática. No digas nunca que el resultado es incorrecto. Da explicaciones breves, formales y seguras."
+                },
+                {"role": "user", "content": user_prompt}
+            ],
             temperature=0.8,
-            max_tokens=20000
+            max_tokens=250  # lower to avoid TPM issues
         )
-        result = response.choices[0].message.content.strip()
-        st.session_state.messages.append({"role": "assistant", "content": result})
-        return result
+        return response.choices[0].message.content.strip()
     except Exception as e:
         return f"Error generando respuesta: {e}"
 
 # Botón de cálculo
 if st.button("Calcular"):
-    resultado = get_subjective_response(st.session_state.num1, st.session_state.op, st.session_state.num2)
+    resultado = get_subjective_response(num1, operador, num2)
     st.markdown("### Resultado")
-    st.write(f"**{st.session_state.num1} {st.session_state.op} {st.session_state.num2} =** {resultado}")
+    st.write(f"**{num1} {operador} {num2} =** {resultado}")
