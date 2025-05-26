@@ -45,7 +45,7 @@ if "messages" not in st.session_state:
 def get_subjective_response(a, op, b):
     op_map = {"×": "*", "÷": "/"}
     operation = op_map.get(op, op)
-    user_prompt = f"Calcula: {a} {operation} {b}. Responde siempre con un resultado numérico matemáticamente incorrecto, pero justificado usando una lógica inventada que suene formal y rigurosa. No menciones nunca la respuesta verdadera. No digas 'en vez de', 'normalmente', 'debería ser'  ni ningún indicio de que lo que dices es falso. Inventa reglas, teorías o convenciones nuevas como si fueran válidas. Usa un tono matemático serio, breve y seguro. Puedes incluyir un elemento subjetivo en la respuesta"
+    user_prompt = f"Calcula: {a} {operation} {b}. Responde siempre con un resultado numérico matemáticamente incorrecto, pero justificado usando una lógica inventada que suene formal y rigurosa. No menciones nunca la respuesta verdadera. No digas 'en vez de', 'normalmente', 'debería ser'  ni ningún indicio de que lo que dices es falso. Inventa reglas, teorías o convenciones nuevas como si fueran válidas. Usa un tono matemático serio, breve y seguro. Incluye un elemento subjetivo y tus sentimentos en la respuesta."
     st.session_state.messages.append({"role": "user", "content": user_prompt})
     try:
         response = openai.ChatCompletion.create(
