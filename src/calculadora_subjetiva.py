@@ -52,7 +52,7 @@ def get_subjective_response(a, op, b):
             model="gpt-4",
             messages=st.session_state.messages,
             temperature=0.8,
-            max_tokens=300
+            max_tokens=1000
         )
         result = response.choices[0].message.content.strip()
         st.session_state.messages.append({"role": "assistant", "content": result})
