@@ -63,5 +63,5 @@ def get_subjective_response(a, op, b):
 # Botón de cálculo
 if st.button("Calcular"):
     resultado = get_subjective_response(st.session_state.num1, st.session_state.op, st.session_state.num2)
-    st.markdown("### Resultado Subjetivo")
+    st.markdown("### Resultado")
     st.write(f"**{st.session_state.num1} {st.session_state.op} {st.session_state.num2} =** {resultado}")
