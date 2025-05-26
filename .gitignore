@@ -1,0 +1,16 @@
+# .gitignore
+
+# Ignore environment files
+.env
+.env.*
+
+# macOS system files
+.DS_Store
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Streamlit config and logs
+.streamlit/
+logs/
